@@ -1,0 +1,174 @@
+html {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: repeating-linear-gradient(45deg, blue 0px, blue 20px, lightblue 20px, lightblue 40px), repeating-linear-gradient(135deg, blue 0px, blue 20px, lightblue 20px, lightblue 40px);
+    background-size: 100 50%;
+    background-position: top left, bottom left;
+    background-repeat: round;
+}
+
+body {
+    text-align: center;
+    margin: 0 !important;
+}
+
+#kontent {
+    padding: 50px 0 50px;
+    width: 50%;
+    margin: 50px 25% 0px;
+    background-color: white;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#komendytextarea {
+    width: 90%;
+    overflow-y: scroll;
+    height: 300px;
+    border-color: #555555;
+    outline: 1px;
+}
+
+#dlugosc {
+    font-size: 24px;
+    
+}
+
+#wyjscietextarea {
+    width: 90%;
+    height: 100px;
+}
+
+#ustawienia-ikona {
+    width: 30px;
+    cursor: pointer;
+    position: fixed;
+    top: -5px;
+    left: -5px;
+    padding: 10px;
+    background-color: white;
+    border-bottom-right-radius: 20px;
+
+}
+
+#ustawienia-dialog {
+    display: none;
+    background-color: #0000008a;
+    border-radius: 5px;
+    position: fixed;
+    padding: 20px;
+    z-index: 5;
+    
+}
+
+#ustawienia-dialog-przenoszenie {
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    top: 0px;
+    left: 0px;
+    background-color: #333333;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    cursor: move;
+}
+
+#ustawienia-dialog-przenoszenie-ukryj-button {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    right: 2px;
+    top: -9px;
+}
+
+
+#ustawienia-dialog-kontent {
+    color: white;
+}
+
+
+#stworzkomende-button {
+    border: none;
+    border-radius: 6px;
+    background-color: #333333;
+    color: white;
+    width: 90%;
+    padding: 10px 0px;
+    font-size: 22px;
+}
+
+#maszyna-ustawienia-table 
+{
+    width: 80%;
+    margin: 0px 10%;
+    text-align: center;
+}
+
+#maszyna-ustawienia-table input {
+    text-align: center;
+}
+
+#tabliczki {
+    width: 90%;
+    border: 1px #222222;
+    border-radius: 5px;
+    text-align: center;
+    background-color: white;
+    margin: 0px 5%;
+
+}
+
+#tabliczki input {
+    border-radius: 2px;
+    border: 1px;
+}
+
+
+.tabliczki-tabliczkadiv {
+    background-color: #dddddd;
+    border-radius: 10px;
+    border: 1px #333333;
+    margin: 10px 0px;
+    padding: 10px 0px;
+}
+
+
+#tabliczka-tabliczkaniszczaca-text {
+    outline: none;
+    border: none;
+    background-image: url(../cmdc-web_files/tabliczka.png);
+    text-align: center;
+    font-size: 22px;
+    height: 110px;
+}
+
+.przycisk-rozwin {
+    height: 24px;
+    transition: 0.5s;
+    transform: rotate(90deg);
+}
+
+#maszyna-ustawienia {
+    display: block;
+
+}
+
+.transition {
+    transition: 0.5s;
+    height: auto;
+}
+
+.tabliczka-input {
+
+}
+
+
+
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    text-align: center;
+  }
+
