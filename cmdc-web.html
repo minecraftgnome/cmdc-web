@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<head>
+  <noscript>
+    <span
+      style="background-color: #222222; height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; color: white; z-index: 999; font-size: 35px;"><br><br><br>Twoja
+      przeglądarka nie obsługuje, bądź ma wyłączony javascript</span>
+  </noscript>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="./cmdc-web_files/style.css">
+  <title>Command Combiner Web</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <img src="./cmdc-web_files/ustawienia-ikona.svg" onclick="ustawieniapokaz()" id="ustawienia-ikona">
+  <div id="kontent">
+    <span style="font-size: 35px;">Command Combiner Web</span>
+    <br>
+    <span style="position: relative; margin: 0px 65% 0px 0px">
+      <img onclick='object_toggle(this, "maszyna-ustawienia");' src="./cmdc-web_files/expand.svg"
+        class="przycisk-rozwin" id="ustawienia-rozwin">
+      <label for="ustawienia-rozwin" style="font-size: 24px;">Ustawienia</span>
+    </span><br>
+    <div class="transition" id="maszyna-ustawienia">
+      <table id="maszyna-ustawienia-table">
+        <tr>
+          <td>
+            <label for="szerokosc">Szerokość maszyny:</label><br>
+            <input type="number" value="5" id="szerokosc">
+          </td>
+          <td>
+            <label for="blokob">Szerokość maszyny:</label><br>
+            <input type="text" value="gray_concrete" id="blokob">
+          </td>
+          <td>
+            <label for="bloksz">Szyba:</label><br>
+            <input type="text" value="gray_stained_glass" id="bloksz">
+          </td>
+        </tr>
+      </table>
+    </div><br>
+    <span style="position: relative; margin: 0px 65% 0px 0px">
+      <img onclick='object_toggle(this, "tabliczki");' src="./cmdc-web_files/expand.svg" class="przycisk-rozwin"
+        id="tabliczki-rozwin">
+      <label for="tabliczki-rozwin" style="font-size: 24px;">Tabliczki</span>
+    </span><br>
+    <div class="transition" id="tabliczki">
+      <div class="tabliczki-tabliczkadiv">
+        <div id="tabliczka-tabliczkaniszcaca">
+          <!--również temlate dla innych tabliczek-->
+          <input type="text" placeholder="Wiersz 1" class="tabliczka-input" id="tabliczka-niszczaca-wiersz1">
+          
+          <select id="tabliczka-niszczaca-wiersz1-kolor">
+            <option value="dark_red">Dark red</option>
+            <option value="red">Red</option>
+            <option value="gold">Gold</option>
+            <option value="yellow">Yellow</option>
+            <option value="dark_green">Dark green</option>
+            <option value="green">Green</option>
+            <option value="aqua">Aqua</option>
+            <option value="dark_aqua">Dark aqua</option>
+            <option value="dark_blue">Dark blue</option>
+            <option value="blue">Blue</option>
+            <option value="light_purple">Light purple</option>
+            <option value="dark_purple">Dark purple</option>
+            <option value="white">White</option>
+            <option value="gray">Gray</option>
+            <option value="dark_gray">Dark gray</option>
+            <option value="black">Black</option>
+          </select>
+          <input type="checkbox" id="tabliczka-niszczaca-wiersz1-bold">
+          <br>
+          <input type="text" placeholder="Wiersz 2" class="tabliczka-input" id="tabliczka-niszczaca-wiersz2"><br>
+          <input type="text" placeholder="Wiersz 3" class="tabliczka-input" id="tabliczka-niszczaca-wiersz3"><br>
+          <input type="text" placeholder="Wiersz 4" class="tabliczka-input" id="tabliczka-niszczaca-wiersz4"><br>
+        </div>
+      </div>
+
+    </div>
+
+
+    <textarea onkeyup="komendytextarea_onkeyup()" id="komendytextarea"></textarea><br>
+    <button id="stworzkomende-button" onclick="stworzkomende()">Stwórz komende</button><br>
+    <label id="dlugosc"></label><br>
+    <textarea onclick="this.focus(); this.select()" readonly id="wyjscietextarea"></textarea><br>
+
+
+  </div>
+  <div id="ustawienia-dialog">
+    <div id="ustawienia-dialog-przenoszenie">
+      <a id="ustawienia-dialog-przenoszenie-ukryj-button" onclick="ustawienia_dialog_ukryj()">&times;</a>
+    </div>
+    <div id="ustawienia-dialog-kontent">
+      <br>
+      <label for="rozmiarczcionki">Rozmiar czcionki:</label>
+      <select onchange="ustawienia_dialog_rozmiarczcionki()" id="rozmiarczcionki">
+        <option value="8px">8px</option>
+        <option value="9px">9px</option>
+        <option value="10px">10px</option>
+        <option value="11px">11px</option>
+        <option value="12px" selected>12px</option>
+        <option value="14px">14px</option>
+        <option value="16px">16px</option>
+        <option value="18px">18px</option>
+        <option value="20px">20px</option>
+        <option value="22px">22px</option>
+        <option value="24px">24px</option>
+        <option value="26px">26px</option>
+        <option value="28px">28px</option>
+        <option value="36px">36px</option>
+        <option value="48px">48px</option>
+        <option value="72px">72px</option>
+      </select><br>
+      <label for="ustawienia-dialog-generowanienabiezaco">Generowanie na bieżąco (może wpływać na wydajność,
+        <br>Ostrzeżenie o za długiej komendzie zostanie wyłączone): </label>
+      <input type="checkbox" id="ustawienia-dialog-generowanienabiezaco">
+
+    </div>
+  </div>
+
+  <script>
+    var wejscie = document.getElementById("komendytextarea");
+    var wyjscie = document.getElementById("wyjscietextarea");
+    var komendawyjscie;
+    var szerokosc = parseInt(document.getElementById("szerokosc").value) - 2;
+    var blokob = document.getElementById("blokob").value;
+    var bloksz = document.getElementById("bloksz").value;
+    var dlugosc = document.getElementById("dlugosc");
+
+    function getlinescount() {
+      return wejscie.value.split('\n').length;
+    }
+
+    function getlines() {
+      return wejscie.value.split('\n');
+    }
+
+    function cudzyslowblok(wejscie) {
+      wejscie = wejscie.replace("\\\\\\", "\\\\\\");
+      wejscie = wejscie.replace("\\", "\\\\\\\\");
+      wejscie = wejscie.replace("\"", "\\\\\\\"");
+      return wejscie;
+
+    }
+
+    function cudzyslow(wejscie) {
+      wejscie = wejscie.replace("\\\\", "\\\\\\");
+      wejscie = wejscie.replace("\\", "\\\\");
+      wejscie = wejscie.replace("\"", "\\\"");
+      return wejscie;
+    }
+
+    function stworzkomende() {
+      if ($("#ustawienia-dialog-generowanienabiezaco").prop("checked") == false) {
+        if (wejscie.value == "") {
+          alert("Nie możesz utorzyć pustej komendy");
+          return;
+        }
+      } else {
+        if (wejscie.value == "") {
+          wyjscie.innerHTML = "Nie możesz utworzyć pustej komendy";
+          dlugosc.innerHTML = "Długość komendy: to nie komenda";
+          return;
+        }
+
+      }
+
+      var tabwyjscie = "";
+      var wejscietab = new Array(getlinescount());
+      wejscietab = getlines();
+      //tabwyjscie = form3.textBox1.Text;
+      var spr = 0;
+      var srodekp = 0;
+      var chainx = 0;
+      var repeatingz = 0;
+      var dlugoscmaszyny = 0;
+      var cmdblokiry = 0;
+      var cmdblokicy = 0;
+      var szerokoscint = 0;
+      var ilosclin = getlinescount();
+      srodek = 0;
+      var chainz = -1;
+      var fillair = 0;
+      var sprawdzanie = 0;
+      komendawyjscie = "";
+      nawiasy = 0;
+      if (szerokosc != "") {
+        szerokoscint = szerokosc;
+      }
+      do {
+        if (wejscietab[sprawdzanie].includes("$P: ")) {
+          fillair++;
+        }
+        sprawdzanie++;
+      } while (sprawdzanie < ilosclin);
+      komendawyjscie =
+        "summon villager ~ ~1 ~ {Health:0f,Passengers:[{id:\"minecraft:falling_block\",BlockState:{Name:\"minecraft:redstone_block\"},Time:1,Passengers:[{id:\"minecraft:villager\",Health:0f,Passengers:[{id:\"minecraft:falling_block\",BlockState:{Name:\"minecraft:activator_rail\",Properties:{shape:\"east_west\"}},Time:1";
+      komendawyjscie = komendawyjscie +
+        ",Passengers:[{id:\"minecraft:command_block_minecart\",Command:\"fill ~3 ~-1 ~-1 ~" + ((ilosclin + 4) -
+          fillair) + " ~1 ~" + ilosclin + " air\"";
+      do {
+        if (repeatingz > szerokoscint) {
+          cmdblokiry++;
+          repeatingz = 0;
+        }
+        if (chainz > szerokoscint) {
+          cmdblokicy++;
+          chainz = 0;
+        }
+        if (wejscietab[spr].includes("$P: ")) {
+          komendawyjscie = komendawyjscie + ",Passengers:[{id:\"minecraft:command_block_minecart\",Command:\"" +
+            cudzyslow(wejscietab[srodek + srodekp]).replace("$P: ", "") + "\"";
+          srodekp++;
+        } else if (wejscietab[spr].includes("$C: ")) {
+          komendawyjscie = komendawyjscie +
+            ",Passengers:[{id:\"minecraft:command_block_minecart\",Command:\"setblock ~" + (chainx + 5) + " ~" +
+            cmdblokicy + " ~" + chainz + " minecraft:chain_command_block[conditional=true,facing=east]{Command:\\\"" +
+            cudzyslowblok(wejscietab[srodek + srodekp].replace("$C: ", "")) + "\\\",auto:1b} replace\"";
+          srodek++;
+          chainx++;
+        } else if (wejscietab[spr].includes("$CF: ")) {
+          komendawyjscie = komendawyjscie +
+            ",Passengers:[{id:\"minecraft:command_block_minecart\",Command:\"setblock ~" + (chainx + 5) + " ~" +
+            cmdblokicy + " ~" + chainz + " minecraft:chain_command_block[facing=east]{Command:\\\"" + cudzyslowblok(
+              wejscietab[srodek + srodekp].replace("$CF: ", "")) + "\\\",auto:1b} replace\"";
+          srodek++;
+          chainx++;
+        } else {
+          repeatingz++;
+          chainz++;
+          komendawyjscie = komendawyjscie +
+            ",Passengers:[{id:\"minecraft:command_block_minecart\",Command:\"setblock ~4 ~" + cmdblokiry + " ~" + (
+              repeatingz - 1) + " minecraft:repeating_command_block[facing=east]{Command:\\\"" + cudzyslowblok(
+              wejscietab[srodek + srodekp]) + "\\\",auto:1b} replace\"";
+          srodek++;
+          chainx = 0;
+        }
+        if (chainx > dlugoscmaszyny) dlugoscmaszyny = chainx;
+        spr++;
+      } while ((srodek + srodekp) < ilosclin);
+      komendawyjscie = komendawyjscie +
+        ",Passengers:[{id:\"minecraft:command_block_minecart\",Command:\"fill ~3 ~-1 ~-1 ~" + (dlugoscmaszyny + 5) +
+        " ~" + (cmdblokiry + 1) + " ~" + (parseInt(szerokoscint) + 1) + " " + blokob + " keep\"";
+      komendawyjscie = komendawyjscie +
+        ",Passengers:[{id:\"minecraft:command_block_minecart\",Command:\"fill ~3 ~ ~-1 ~" + (dlugoscmaszyny + 5) +
+        " ~" + cmdblokiry + " ~" + (parseInt(szerokoscint) + 1) + " " + bloksz + " replace " + blokob + "\"";
+      komendawyjscie = komendawyjscie +
+        tabwyjscie;
+      komendawyjscie = komendawyjscie +
+        ",Passengers:[{id:\"minecraft:command_block_minecart\",Command:\"setblock ~ ~ ~ air\"";
+      komendawyjscie = komendawyjscie +
+        ",Passengers:[{id:\"minecraft:villager\",Health:0f,Passengers:[{id:\"minecraft:falling_block\",BlockState:{Name:\"minecraft:command_block\"},TileEntityData:{Command:\"kill @e[type=command_block_minecart,distance=..3]\",auto:1b},Time:1,Passengers:[{id:\"minecraft:villager\",Health:0f,Passengers:[{id:\"minecraft:falling_block\",BlockState:{Name:\"minecraft:command_block\"},TileEntityData:{Command:\"fill ~ ~-3 ~ ~ ~ ~ air\",auto:1b},Time:1";
+      do {
+        komendawyjscie = komendawyjscie + "}]";
+        nawiasy++;
+      } while (ilosclin + 10 > nawiasy);
+      komendawyjscie = komendawyjscie +
+        ",Attributes:[{Name:generic.max_health,Base:-1}]}]}],Attributes:[{Name:generic.max_health,Base:-1}]}";
+      if (komendawyjscie.length > 32500) {
+        if ($("#ustawienia-dialog-generowanienabiezaco").prop("checked") == false) {
+          alert("Komenda jest dłuższa niż 32500 znaków,\nW przyszłości planuję zrobić rozwiązanie dla tego problemu");
+        }
+      }
+      wyjscie.innerHTML = komendawyjscie;
+      dlugosc.innerHTML = "Długość komendy: " + komendawyjscie.length.toString();
+
+    }
+
+    function ustawieniapokaz() {
+      var ustawieniadialog = document.getElementById("ustawienia-dialog");
+      $(ustawieniadialog).css("display", "block");
+      $(ustawieniadialog).css("left", event.clientX + "px");
+      $(ustawieniadialog).css("top", event.clientY + "px");
+
+    }
+
+    function ustawienia_dialog_rozmiarczcionki() {
+      $(wejscie).css("font-size", document.getElementById("rozmiarczcionki").value)
+    }
+
+    function ustawienia_dialog_ukryj() {
+      var ustawieniadialog = document.getElementById("ustawienia-dialog");
+      $(ustawieniadialog).css("display", "none");
+    }
+    var ustawienia_dialog_czyprzenoszenie = false;
+
+    dragElement(document.getElementById("ustawienia-dialog-przenoszenie"), document.getElementById(
+      "ustawienia-dialog"));
+
+    // \/ \/ \/ \/ \/ kod ze strony w3schools.com, z pewnymi modyfikacjami \/ \/ \/ \/ \/
+    function dragElement(elmnt, parentelmnt) {
+      var pos1 = 0,
+        pos2 = 0,
+        pos3 = 0,
+        pos4 = 0;
+      if (document.getElementById(elmnt.id + "header")) {
+        /* if present, the header is where you move the DIV from:*/
+        document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+      } else {
+        /* otherwise, move the DIV from anywhere inside the DIV:*/
+        elmnt.onmousedown = dragMouseDown;
+      }
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        parentelmnt.style.top = (parentelmnt.offsetTop - pos2) + "px";
+        parentelmnt.style.left = (parentelmnt.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        /* stop moving when mouse button is released:*/
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
+    // Koniec skryptu z w3schools
+    function komendytextarea_onkeyup() {
+      if ($("#ustawienia-dialog-generowanienabiezaco").prop("checked") == true) {
+        stworzkomende();
+      }
+    }
+
+    function tabliczka_max_lines(obj) {
+      var tabliczka_tabliczkaniszczaca_text_var = obj.value;
+      if (tabliczka_tabliczkaniszczaca_text_var.split("\n").length > 4) {
+        document.getElementById("tabliczka-tabliczkaniszczaca-ostrzezenieoliniach").innerHTML =
+          "Tabliczka w minecraft nie może mieć więcej niż 4 linie";
+      } else {
+        document.getElementById("tabliczka-tabliczkaniszczaca-ostrzezenieoliniach").innerHTML = "";
+      }
+    }
+
+
+    var ustawienia_czyrozwiniety = true;
+
+    function object_toggle(elmnt, toggleelement) {
+      var toggleelementvar = document.getElementById(toggleelement);
+      if (ustawienia_czyrozwiniety == true) {
+        $(elmnt).css("transform", "rotate(0deg)");
+        $(toggleelementvar).css("transform", "scaleY(0.0)");
+        $(toggleelementvar).css("height", "0px");
+        ustawienia_czyrozwiniety = false;
+      } else {
+        $(elmnt).css("transform", "rotate(90deg)");
+        $(toggleelementvar).css("height", "auto");
+        $(toggleelementvar).css("transform", "scaleY(1.0)");
+
+
+        ustawienia_czyrozwiniety = true;
+      }
+
+    }
+  </script>
+</body>
+
+</html>
